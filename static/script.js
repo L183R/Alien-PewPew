@@ -272,13 +272,10 @@ function startGame() {
 }
 
 function showMenu() {
-  if (!loggedIn) {
-    msg.innerHTML = 'Iniciá sesión o registrate para empezar a jugar.';
-    return;
-  }
-
   mainMenu?.classList.add('visible');
-  msg.textContent = 'Elegí un modo para iniciar tu partida.';
+  msg.textContent = loggedIn
+    ? 'Elegí un modo para iniciar tu partida.'
+    : 'Iniciá sesión o registrate para desbloquear los modos de juego.';
 }
 
 function hideMenu() {
@@ -286,7 +283,10 @@ function hideMenu() {
 }
 
 function handleModeSelection(mode) {
-  if (!loggedIn) return;
+  if (!loggedIn) {
+    modeInfo.textContent = 'Necesitás iniciar sesión para comenzar a jugar.';
+    return;
+  }
 
   switch (mode) {
     case 'historia':
