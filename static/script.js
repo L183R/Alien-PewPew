@@ -4,6 +4,8 @@ const msg = document.getElementById('msg');
 const vidasEl = document.getElementById('vidas');
 const puntosEl = document.getElementById('puntos');
 const lockOverlay = document.getElementById('lockOverlay');
+const mainMenu = document.getElementById('mainMenu');
+const modeInfo = document.getElementById('modeInfo');
 const loggedIn = document.body.dataset.loggedIn === 'true';
 
 const W = canvas.width;
@@ -56,6 +58,7 @@ let vidas = 3;
 let puntos = 0;
 let spawnTimer = 0;
 let gameOver = false;
+let gameStarted = false;
 
 function resetGame() {
   vidas = 3;
@@ -258,9 +261,59 @@ function startGame() {
     return;
   }
 
+  if (gameStarted && !gameOver) {
+    return;
+  }
+
+  gameStarted = true;
   lockOverlay?.classList.remove('visible');
   msg.textContent = '';
   resetGame();
 }
 
-startGame();
+function showMenu() {
+  if (!loggedIn) {
+    msg.innerHTML = 'Iniciá sesión o registrate para empezar a jugar.';
+    return;
+  }
+
+  mainMenu?.classList.add('visible');
+  msg.textContent = 'Elegí un modo para iniciar tu partida.';
+}
+
+function hideMenu() {
+  mainMenu?.classList.remove('visible');
+}
+
+function handleModeSelection(mode) {
+  if (!loggedIn) return;
+
+  switch (mode) {
+    case 'historia':
+      modeInfo.textContent = 'Modo Historia: enfrentate a oleadas cada vez más difíciles.';
+      hideMenu();
+      startGame();
+      break;
+    case 'colonias':
+      modeInfo.textContent = 'Colonias estará disponible pronto. ¡Mantente atento!';
+      break;
+    case 'tienda':
+      modeInfo.textContent = 'La Tienda abrirá en una próxima actualización.';
+      break;
+    case 'configuracion':
+      modeInfo.textContent = 'Configuración: ajustes próximamente.';
+      break;
+    default:
+      modeInfo.textContent = '';
+  }
+}
+
+mainMenu?.addEventListener('click', (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLButtonElement)) return;
+  const mode = target.dataset.mode;
+  if (!mode || target.disabled) return;
+  handleModeSelection(mode);
+});
+
+showMenu();
