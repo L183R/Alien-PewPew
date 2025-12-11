@@ -293,24 +293,29 @@ function hideMenu() {
 }
 
 function handleModeSelection(mode) {
-  if (!loggedIn) {
-    modeInfo.textContent = 'Necesitás iniciar sesión para comenzar a jugar.';
-    return;
-  }
-
   switch (mode) {
     case 'historia':
-      modeInfo.textContent = 'Modo Historia: enfrentate a oleadas cada vez más difíciles.';
+      modeInfo.textContent = loggedIn
+        ? 'Modo Historia: enfrentate a oleadas cada vez más difíciles.'
+        : 'Modo Historia (demo): iniciá sesión para guardar tu progreso.';
       hideMenu();
-      startGame();
+      startGame(!loggedIn);
       break;
     case 'colonias':
       modeInfo.textContent = 'Colonias estará disponible pronto. ¡Mantente atento!';
       break;
     case 'tienda':
+      if (!loggedIn) {
+        modeInfo.textContent = 'Necesitás iniciar sesión para ingresar a la Tienda.';
+        return;
+      }
       modeInfo.textContent = 'La Tienda abrirá en una próxima actualización.';
       break;
     case 'configuracion':
+      if (!loggedIn) {
+        modeInfo.textContent = 'Iniciá sesión para acceder a Configuración.';
+        return;
+      }
       modeInfo.textContent = 'Configuración: ajustes próximamente.';
       break;
     default:
@@ -327,4 +332,3 @@ mainMenu?.addEventListener('click', (event) => {
 });
 
 showMenu();
-startGame(true);
