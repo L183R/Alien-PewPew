@@ -86,6 +86,38 @@ label {
   color: #cbd5e1;
 }
 
+.menu {
+  display: none;
+  width: min(720px, 100%);
+  gap: 14px;
+}
+
+.menu.visible {
+  display: flex;
+}
+
+.menu__header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.menu__header p {
+  margin: 4px 0 0;
+  color: #cbd5e1;
+}
+
+.menu__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.menu__info {
+  margin: 0;
+  min-height: 20px;
+  color: #cbd5e1;
+}
+
 input {
   background: #0f172a;
   border: 1px solid var(--border);
@@ -113,6 +145,14 @@ button:hover {
 button.secondary {
   background: var(--accent-2);
   color: #0b1220;
+}
+
+button:disabled {
+  background: #1f2937;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .flash {

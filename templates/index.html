@@ -54,6 +54,21 @@
   {% endif %}
 
   <main class="layout">
+    {% if username %}
+      <section id="mainMenu" class="card menu">
+        <div class="menu__header">
+          <h2>Menú principal</h2>
+          <p>Elegí un modo para comenzar tu partida.</p>
+        </div>
+        <div class="menu__grid">
+          <button type="button" data-mode="historia">Historia</button>
+          <button type="button" data-mode="colonias" disabled>Colonias (próximamente)</button>
+          <button type="button" data-mode="tienda">Tienda</button>
+          <button type="button" data-mode="configuracion">Configuración</button>
+        </div>
+        <p id="modeInfo" class="menu__info"></p>
+      </section>
+    {% endif %}
     <div id="gameContainer">
       <div id="lockOverlay" class="overlay {{ 'visible' if not username else '' }}">
         <p>Iniciá sesión o creá una cuenta para jugar.</p>
