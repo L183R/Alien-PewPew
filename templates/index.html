@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Alien PewPew</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body data-logged-in="{{ 'true' if username else 'false' }}">
+  <header class="topbar">
+    <div>
+      <h1>Alien PewPew</h1>
+      <p class="subtitle">Mini shooter en Flask</p>
+    </div>
+    <div class="user-panel">
+      {% if username %}
+        <span class="welcome">Hola, {{ username }} 👋</span>
+        <form action="{{ url_for('logout') }}" method="post">
+          <button type="submit" class="secondary">Cerrar sesión</button>
+        </form>
+      {% else %}
+        <div class="auth-grid">
+          <form action="{{ url_for('login') }}" method="post" class="card">
+            <h2>Iniciar sesión</h2>
+            <label>Usuario
+              <input type="text" name="username" required>
+            </label>
+            <label>Contraseña
+              <input type="password" name="password" required>
+            </label>
+            <button type="submit">Entrar</button>
+          </form>
+          <form action="{{ url_for('register') }}" method="post" class="card">
+            <h2>Crear cuenta</h2>
+            <label>Usuario
+              <input type="text" name="username" required>
+            </label>
+            <label>Contraseña
+              <input type="password" name="password" required>
+            </label>
+            <button type="submit" class="secondary">Registrarme</button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if flashes %}
+    <div class="flash">
+      {% for message in flashes %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main class="layout">
+    <div id="gameContainer">
+      <div id="lockOverlay" class="overlay {{ 'visible' if not username else '' }}">
+        <p>Iniciá sesión o creá una cuenta para jugar.</p>
+      </div>
+      <canvas id="game" width="480" height="640"></canvas>
+      <div id="msg"></div>
+    </div>
+    <div id="hud">
+      <span>Vidas: <span id="vidas">3</span></span>
+      <span>Puntos: <span id="puntos">0</span></span>
+      <span>Controles: ← → para moverte, ESPACIO para disparar</span>
+    </div>
+  </main>
+</body>
+</html>

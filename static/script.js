@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 const msg = document.getElementById('msg');
 const vidasEl = document.getElementById('vidas');
 const puntosEl = document.getElementById('puntos');
+const lockOverlay = document.getElementById('lockOverlay');
+const loggedIn = document.body.dataset.loggedIn === 'true';
 
 const W = canvas.width;
 const H = canvas.height;
@@ -249,5 +251,16 @@ function loop(timestamp) {
   }
 }
 
-// Inicio
-resetGame();
+function startGame() {
+  if (!loggedIn) {
+    msg.innerHTML = 'Iniciá sesión o registrate para empezar a jugar.';
+    lockOverlay?.classList.add('visible');
+    return;
+  }
+
+  lockOverlay?.classList.remove('visible');
+  msg.textContent = '';
+  resetGame();
+}
+
+startGame();
