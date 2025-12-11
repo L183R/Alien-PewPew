@@ -59,6 +59,7 @@ let puntos = 0;
 let spawnTimer = 0;
 let gameOver = false;
 let gameStarted = false;
+let previewMode = false;
 
 function resetGame() {
   vidas = 3;
@@ -254,21 +255,30 @@ function loop(timestamp) {
   }
 }
 
-function startGame() {
-  if (!loggedIn) {
+function startGame(allowPreview = false) {
+  if (!loggedIn && !allowPreview) {
     msg.innerHTML = 'Iniciá sesión o registrate para empezar a jugar.';
     lockOverlay?.classList.add('visible');
     return;
   }
 
-  if (gameStarted && !gameOver) {
-    return;
+  // Permite reiniciar si veníamos de un modo previa y ahora se inicia el juego real
+  const shouldRestart = !gameStarted || gameOver || previewMode !== (allowPreview && !loggedIn);
+
+  previewMode = allowPreview && !loggedIn;
+  gameStarted = true;
+
+  if (previewMode) {
+    msg.innerHTML = 'Demo rápida: iniciá sesión para desbloquear los modos.';
+  } else {
+    msg.textContent = '';
   }
 
-  gameStarted = true;
   lockOverlay?.classList.remove('visible');
-  msg.textContent = '';
-  resetGame();
+
+  if (shouldRestart) {
+    resetGame();
+  }
 }
 
 function showMenu() {
@@ -317,3 +327,4 @@ mainMenu?.addEventListener('click', (event) => {
 });
 
 showMenu();
+startGame(true);
