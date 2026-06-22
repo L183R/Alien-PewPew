@@ -60,11 +60,16 @@ let spawnTimer = 0;
 let gameOver = false;
 let gameStarted = false;
 let previewMode = false;
+let animationFrameId = null;
 
 function resetGame() {
   vidas = 3;
   puntos = 0;
   player.x = W / 2;
+  player.cooldown = 0;
+  keys.left = false;
+  keys.right = false;
+  keys.shoot = false;
   bullets.length = 0;
   enemies.length = 0;
   enemyBullets.length = 0;
@@ -73,7 +78,10 @@ function resetGame() {
   msg.textContent = '';
   updateHud();
   lastTime = performance.now();
-  requestAnimationFrame(loop);
+  if (animationFrameId !== null) {
+    cancelAnimationFrame(animationFrameId);
+  }
+  animationFrameId = requestAnimationFrame(loop);
 }
 
 function updateHud() {
@@ -251,7 +259,9 @@ function loop(timestamp) {
   draw();
 
   if (!gameOver) {
-    requestAnimationFrame(loop);
+    animationFrameId = requestAnimationFrame(loop);
+  } else {
+    animationFrameId = null;
   }
 }
 

@@ -28,14 +28,24 @@ def load_users() -> Dict[str, str]:
     if not USERS_FILE.exists():
         return {}
     try:
-        data = json.loads(USERS_FILE.read_text())
-        return data.get("users", {}) if isinstance(data, dict) else {}
+        data = json.loads(USERS_FILE.read_text(encoding="utf-8"))
+        users = data.get("users", {}) if isinstance(data, dict) else {}
+        if not isinstance(users, dict):
+            return {}
+        return {
+            username: password_hash
+            for username, password_hash in users.items()
+            if isinstance(username, str) and isinstance(password_hash, str)
+        }
     except json.JSONDecodeError:
         return {}
 
 
 def save_users(users: Dict[str, str]) -> None:
-    USERS_FILE.write_text(json.dumps({"users": users}, indent=2))
+    USERS_FILE.write_text(
+        json.dumps({"users": users}, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
 
 
 @app.route("/")
